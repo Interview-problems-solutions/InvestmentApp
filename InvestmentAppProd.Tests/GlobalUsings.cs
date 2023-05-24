@@ -3,7 +3,13 @@
 global using System;
 global using System.Collections.Generic;
 global using System.Linq;
+global using System.Threading;
 global using System.Threading.Tasks;
+global using FluentAssertions;
+global using InvestmentAppProd.Commands;
+global using InvestmentAppProd.Commands.AddInvestment;
+global using InvestmentAppProd.Commands.DeleteInvestment;
+global using InvestmentAppProd.Commands.UpdateInvestment;
 global using InvestmentAppProd.Controllers;
 global using InvestmentAppProd.Data;
 global using InvestmentAppProd.Models;

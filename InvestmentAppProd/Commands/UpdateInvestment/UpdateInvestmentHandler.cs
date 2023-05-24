@@ -1,6 +1,6 @@
 ﻿namespace InvestmentAppProd.Commands.UpdateInvestment;
 
-internal class UpdateInvestmentHandler : IRequestHandler<UpdateInvestmentCommand, Result<Unit, IError>>
+public class UpdateInvestmentHandler : IRequestHandler<UpdateInvestmentCommand, Result<Unit, IError>>
 {
     private readonly InvestmentDBContext _context;
 
