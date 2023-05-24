@@ -4,12 +4,10 @@
 [ApiController]
 public class InvestmentController : Controller
 {
-    private readonly InvestmentDBContext _context;
     private readonly IMediator _mediator;
 
-    public InvestmentController(InvestmentDBContext context, IMediator mediator)
+    public InvestmentController(IMediator mediator)
     {
-        _context = context;
         _mediator = mediator;
     }
 
