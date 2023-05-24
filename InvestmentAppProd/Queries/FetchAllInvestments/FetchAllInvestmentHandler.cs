@@ -8,5 +8,5 @@ public class FetchAllInvestmentHandler : IRequestHandler<FetchAllInvestmentsComm
 
     public async Task<IEnumerable<Investment>> Handle(
         FetchAllInvestmentsCommand command,
-        CancellationToken cancellationToken) => await _context.Investments.ToListAsync();
+        CancellationToken cancellationToken) => await _context.Investments.ToListAsync(cancellationToken);
 }

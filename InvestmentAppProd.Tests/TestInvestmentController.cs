@@ -177,14 +177,14 @@ namespace InvestmentAppProd.Tests
         }
 
         [Test]
-        public void DeleteInvestment_SingleItem_ShouldDeleteInvestment()
+        public async Task DeleteInvestment_SingleItem_ShouldDeleteInvestment()
         {
             // Arrange
             var controller = new InvestmentController(_context, _mediator);
             var deleteInvestment = "Investment 2";
 
             // Act
-            var result = controller.DeleteInvestment(deleteInvestment);
+            var result = await controller.DeleteInvestment(deleteInvestment);
             var obj = result as NoContentResult;
 
             // Assert   : Status code 204 ("No Content")

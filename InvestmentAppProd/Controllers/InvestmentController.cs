@@ -1,4 +1,5 @@
-﻿using InvestmentAppProd.Queries.FetchAllInvestments;
+﻿using InvestmentAppProd.Commands.DeleteInvestment;
+using InvestmentAppProd.Queries.FetchAllInvestments;
 using InvestmentAppProd.Queries.FetchInvestment;
 
 namespace InvestmentAppProd.Controllers
@@ -97,18 +98,16 @@ namespace InvestmentAppProd.Controllers
         }
 
         [HttpDelete("name")]
-        public ActionResult DeleteInvestment([FromQuery] string name)
+        public async Task<ActionResult> DeleteInvestment([FromQuery] string name)
         {
             try
             {
-                var investment = _context.Investments.Find(name);
-                if (investment == null)
+                var result = await _mediator.Send(new DeleteInvestmentCommand(name));
+                
+                if (result.IsFailure)
                 {
                     return NotFound();
                 }
-                _context.ChangeTracker.Clear();
-                _context.Investments.Remove(investment);
-                _context.SaveChanges();
 
                 return NoContent();
             }
