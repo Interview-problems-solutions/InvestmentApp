@@ -16,7 +16,7 @@ public class InvestmentController : Controller
     {
         try
         {
-            return Ok(await _mediator.Send(new FetchAllInvestmentsCommand()));
+            return Ok(await _mediator.Send(new FetchAllInvestmentsQuery()));
         }
         catch (Exception e)
         {
@@ -29,7 +29,7 @@ public class InvestmentController : Controller
     {
         try
         {
-            var investment = await _mediator.Send(new FetchInvestmentCommand(name));
+            var investment = await _mediator.Send(new FetchInvestmentQuery(name));
             
             if (investment.HasNoValue) return NotFound($"Investment with name {name} not found.");
 

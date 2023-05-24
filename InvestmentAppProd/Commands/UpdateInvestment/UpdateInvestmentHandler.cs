@@ -15,7 +15,7 @@ public class UpdateInvestmentHandler : IRequestHandler<UpdateInvestmentCommand, 
             return Result.Failure<Unit, IError>(new Error(ErrorType.StartDateInFuture));
 
         var result = await new FetchInvestmentHandler(_context).Handle(
-            new FetchInvestmentCommand(command.NameOfInvestmentToUpdate),
+            new FetchInvestmentQuery(command.NameOfInvestmentToUpdate),
             cancellationToken);
         if(result.HasNoValue)
             return Result.Failure<Unit, IError>(new Error(ErrorType.DoesNotExit));

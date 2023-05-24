@@ -15,7 +15,7 @@ public class TestInvestmentController
         services.AddMediatR(
             cfg =>
             {
-                cfg.RegisterServicesFromAssembly(typeof(FetchAllInvestmentsCommand).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(FetchAllInvestmentsQuery).Assembly);
             });
         var provider = services.BuildServiceProvider();
 

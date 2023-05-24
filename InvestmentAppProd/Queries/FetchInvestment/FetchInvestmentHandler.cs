@@ -1,12 +1,12 @@
 ﻿namespace InvestmentAppProd.Queries.FetchInvestment;
 
-internal class FetchInvestmentHandler : IRequestHandler<FetchInvestmentCommand, Maybe<Investment>>
+public class FetchInvestmentHandler : IRequestHandler<FetchInvestmentQuery, Maybe<Investment>>
 {
     private readonly InvestmentDBContext _context;
 
     public FetchInvestmentHandler(InvestmentDBContext context) { this._context = context; }
 
-    public async Task<Maybe<Investment>> Handle(FetchInvestmentCommand command, CancellationToken cancellationToken)
+    public async Task<Maybe<Investment>> Handle(FetchInvestmentQuery command, CancellationToken cancellationToken)
     {
         if(string.IsNullOrWhiteSpace(command.NameOfInvestment))
             return Maybe<Investment>.None;
