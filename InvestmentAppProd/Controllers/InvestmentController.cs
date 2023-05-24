@@ -1,14 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using InvestmentAppProd.Models;
-using InvestmentAppProd.Data;
+﻿using InvestmentAppProd.Queries.FetchAllInvestments;
 using InvestmentAppProd.Queries.FetchInvestment;
-using MediatR;
 
 namespace InvestmentAppProd.Controllers
 {
@@ -30,7 +21,7 @@ namespace InvestmentAppProd.Controllers
         {
             try
             {
-                return Ok(await _mediator.Send(new FetchInvestmentCommand()));
+                return Ok(await _mediator.Send(new FetchAllInvestmentsCommand()));
             }
             catch (Exception e)
             {
@@ -39,15 +30,15 @@ namespace InvestmentAppProd.Controllers
         }
 
         [HttpGet("name")]
-        public ActionResult<Investment> FetchInvestment([FromQuery] string name)
+        public async Task<ActionResult<Investment>> FetchInvestment([FromQuery] string name)
         {
             try
             {
-                var investment = _context.Investments.Find(name);
-                if (investment == null)
-                    return NotFound();
+                var investment = await _mediator.Send(new FetchInvestmentCommand(name));
+                
+                if (investment.HasNoValue) return NotFound($"Investment with name {name} not found.");
 
-                return Ok(investment);
+                return Ok(investment.Value);
             }
             catch (Exception e)
             {

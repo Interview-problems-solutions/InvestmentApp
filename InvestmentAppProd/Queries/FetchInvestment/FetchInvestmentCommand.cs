@@ -1,10 +1,11 @@
-﻿using InvestmentAppProd.Models;
-using MediatR;
-using System.Collections.Generic;
+﻿namespace InvestmentAppProd.Queries.FetchInvestment;
 
-namespace InvestmentAppProd.Queries.FetchInvestment
+public class FetchInvestmentCommand : IRequest<Maybe<Investment>>
 {
-    public class FetchInvestmentCommand : IRequest<IEnumerable<Investment>>
+    public FetchInvestmentCommand(string nameOfInvestment)
     {
+        NameOfInvestment = nameOfInvestment;
     }
+
+    public string NameOfInvestment { get; }
 }

@@ -16,6 +16,7 @@ using InvestmentAppProd.Queries.FetchInvestment;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using MediatR;
+using InvestmentAppProd.Queries.FetchAllInvestments;
 
 namespace InvestmentAppProd.Tests
 {
@@ -32,9 +33,9 @@ namespace InvestmentAppProd.Tests
 
             services.AddDbContext<InvestmentDBContext>(options => options.UseInMemoryDatabase("InvestmentsDbTest"));
             services.AddMediatR(
-                cfg =>
-                {
-                    cfg.RegisterServicesFromAssembly(typeof(FetchInvestmentCommand).Assembly);
+            cfg =>
+            {
+                    cfg.RegisterServicesFromAssembly(typeof(FetchAllInvestmentsCommand).Assembly);
                 });
             var provider = services.BuildServiceProvider();
 
@@ -110,14 +111,14 @@ namespace InvestmentAppProd.Tests
         }
 
         [Test]
-        public void GetInvestment_WithSingleItem_ShouldReturnSingleInvestment()
+        public async Task GetInvestment_WithSingleItem_ShouldReturnSingleInvestment()
         {
             // Arrange
             var controller = new InvestmentController(_context, _mediator);
             var name = "Investment 1";
 
             // Act
-            var result = controller.FetchInvestment(name);
+            var result = await controller.FetchInvestment(name);
             var obj = result.Result as ObjectResult;
             var objInvResult = obj.Value as Investment;
 

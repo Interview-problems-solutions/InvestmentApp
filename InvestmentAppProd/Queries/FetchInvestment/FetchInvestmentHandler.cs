@@ -1,22 +1,20 @@
-﻿using InvestmentAppProd.Data;
-using InvestmentAppProd.Models;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿namespace InvestmentAppProd.Queries.FetchInvestment;
 
-namespace InvestmentAppProd.Queries.FetchInvestment
+internal class FetchInvestmentHandler : IRequestHandler<FetchInvestmentCommand, Maybe<Investment>>
 {
-    public class FetchInvestmentHandler : IRequestHandler<FetchInvestmentCommand, IEnumerable<Investment>>
+    private readonly InvestmentDBContext _context;
+
+    public FetchInvestmentHandler(InvestmentDBContext context)
     {
-        private readonly InvestmentDBContext _context;
+        this._context = context;
+    }
 
-        public FetchInvestmentHandler(InvestmentDBContext context) { _context = context; }
+    public async Task<Maybe<Investment>> Handle(FetchInvestmentCommand command, CancellationToken cancellationToken)
+    {
+        if(string.IsNullOrWhiteSpace(command.NameOfInvestment)) return Maybe<Investment>.None;
 
-        public async Task<IEnumerable<Investment>> Handle(
-            FetchInvestmentCommand command,
-            CancellationToken cancellationToken) => await _context.Investments.ToListAsync();
+        var investment = await _context.Investments.FindAsync(command.NameOfInvestment);
+        
+        return investment == null ? Maybe<Investment>.None : Maybe<Investment>.From(investment);
     }
 }
