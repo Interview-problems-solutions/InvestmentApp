@@ -1,6 +1,7 @@
-﻿using InvestmentAppProd.Commands.DeleteInvestment;
+﻿using InvestmentAppProd.Commands;
+using InvestmentAppProd.Commands.AddInvestment;
+using InvestmentAppProd.Commands.DeleteInvestment;
 using InvestmentAppProd.Queries.FetchAllInvestments;
-using InvestmentAppProd.Queries.FetchInvestment;
 
 namespace InvestmentAppProd.Controllers
 {
@@ -49,19 +50,20 @@ namespace InvestmentAppProd.Controllers
 
 
         [HttpPost]
-        public ActionResult<Investment> AddInvestment([FromBody] Investment investment)
+        public async Task<ActionResult<Investment>> AddInvestment([FromBody] Investment investment)
         {
             try
             {
-                if (investment.StartDate > DateTime.Now)
-                    return BadRequest("Investment Start Date cannot be in the future.");
+                var result = await _mediator.Send(new AddInvestmentCommand(investment));
 
-                investment.CalculateValue();
-                _context.ChangeTracker.Clear();
-                _context.Investments.Add(investment);
-                _context.SaveChanges();
-
-                return CreatedAtAction("AddInvestment", investment.Name, investment);
+                return result.IsFailure switch
+                {
+                    true when result.Error.ErrorType == ErrorType.StartDateInFuture => BadRequest(
+                        "Investment Start Date cannot be in the future."),
+                    true when result.Error.ErrorType == ErrorType.AlreadyExists => BadRequest(
+                        $"Investment with name {investment.Name} already exists."),
+                    _ => CreatedAtAction("AddInvestment", investment.Name, investment)
+                };
             }
             catch (DbUpdateException dbE)
             {
@@ -84,7 +86,7 @@ namespace InvestmentAppProd.Controllers
                 if (investment.StartDate > DateTime.Now)
                     return BadRequest("Investment Start Date cannot be in the future.");
 
-                investment.CalculateValue();
+                investment.CurrentValue = investment.CalculateInterest();
                 _context.ChangeTracker.Clear();
                 _context.Entry(investment).State = EntityState.Modified;
                 _context.SaveChanges();

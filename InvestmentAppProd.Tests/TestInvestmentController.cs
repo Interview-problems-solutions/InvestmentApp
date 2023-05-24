@@ -33,8 +33,8 @@ namespace InvestmentAppProd.Tests
 
             services.AddDbContext<InvestmentDBContext>(options => options.UseInMemoryDatabase("InvestmentsDbTest"));
             services.AddMediatR(
-            cfg =>
-            {
+                cfg =>
+                {
                     cfg.RegisterServicesFromAssembly(typeof(FetchAllInvestmentsCommand).Assembly);
                 });
             var provider = services.BuildServiceProvider();
@@ -129,7 +129,7 @@ namespace InvestmentAppProd.Tests
         }
 
         [Test]
-        public void AddInvestment_SingleItem_ShouldAddInvestment()
+        public async Task AddInvestment_SingleItem_ShouldAddInvestment()
         {
             // Arrange
             var controller = new InvestmentController(_context, _mediator);
@@ -143,7 +143,7 @@ namespace InvestmentAppProd.Tests
             };
 
             // Act
-            var result = controller.AddInvestment(newInvestnment);
+            var result = await controller.AddInvestment(newInvestnment);
             var obj = result.Result as ObjectResult;
             //var objInvResult = obj.Value as Investment;
 
