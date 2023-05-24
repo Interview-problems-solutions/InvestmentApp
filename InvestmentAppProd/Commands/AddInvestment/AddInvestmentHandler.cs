@@ -19,8 +19,7 @@ public class AddInvestmentHandler : IRequestHandler<AddInvestmentCommand, Result
 
         if(result.HasValue)
             return Result.Failure<Investment, IError>(new Error(ErrorType.AlreadyExists));
-
-        command.Investment.CurrentValue = command.Investment.CalculateInterest();
+        
         _context.ChangeTracker.Clear();
         _context.Investments.Add(command.Investment);
         await _context.SaveChangesAsync(cancellationToken);

@@ -13,8 +13,9 @@ public class Investment
     public double InterestRate { get; set; }
 
     public double PrincipalAmount { get; set; }
-
-    public double CurrentValue { get; set; } = 0;
+    
+    [NotMapped]
+    public double CurrentValue => this.CalculateInterest();
 
     public Investment()
     {

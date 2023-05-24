@@ -19,8 +19,7 @@ public class UpdateInvestmentHandler : IRequestHandler<UpdateInvestmentCommand, 
             cancellationToken);
         if(result.HasNoValue)
             return Result.Failure<Unit, IError>(new Error(ErrorType.DoesNotExit));
-
-        command.NewDetailsOfInvestment.CurrentValue = command.NewDetailsOfInvestment.CalculateInterest();
+        
         _context.ChangeTracker.Clear();
         _context.Entry(command.NewDetailsOfInvestment).State = EntityState.Modified;
         await _context.SaveChangesAsync(cancellationToken);
