@@ -19,6 +19,7 @@
     {
         StartDateInFuture,
         AlreadyExists,
-        Invalid
+        DoesNotExit,
+        NameMisMatch,
     }
 }

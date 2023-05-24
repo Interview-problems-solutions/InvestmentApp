@@ -1,6 +1,7 @@
 ﻿using InvestmentAppProd.Commands;
 using InvestmentAppProd.Commands.AddInvestment;
 using InvestmentAppProd.Commands.DeleteInvestment;
+using InvestmentAppProd.Commands.UpdateInvestment;
 using InvestmentAppProd.Queries.FetchAllInvestments;
 
 namespace InvestmentAppProd.Controllers
@@ -76,22 +77,22 @@ namespace InvestmentAppProd.Controllers
         }
 
         [HttpPut("name")]
-        public ActionResult UpdateInvestment([FromQuery] string name, [FromBody] Investment investment)
+        public async Task<ActionResult> UpdateInvestment([FromQuery] string name, [FromBody] Investment investment)
         {
             try
             {
-                if (name != investment.Name)
-                    return BadRequest("Name does not match the Investment you are trying to update.");
+                var result = await _mediator.Send(new UpdateInvestmentCommand(name, investment));
 
-                if (investment.StartDate > DateTime.Now)
-                    return BadRequest("Investment Start Date cannot be in the future.");
-
-                investment.CurrentValue = investment.CalculateInterest();
-                _context.ChangeTracker.Clear();
-                _context.Entry(investment).State = EntityState.Modified;
-                _context.SaveChanges();
-
-                return NoContent();
+                return result.IsFailure switch
+                {
+                    true when result.Error.ErrorType == ErrorType.NameMisMatch => BadRequest(
+                        "Name does not match the Investment you are trying to update."),
+                    true when result.Error.ErrorType == ErrorType.StartDateInFuture => BadRequest(
+                        "Investment Start Date cannot be in the future."),
+                    true when result.Error.ErrorType == ErrorType.DoesNotExit => BadRequest(
+                        $"Investment with name {investment.Name} does not exists."),
+                    _ => NoContent()
+                };
             }
             catch (Exception e)
             {

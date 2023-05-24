@@ -152,7 +152,7 @@ namespace InvestmentAppProd.Tests
         }
 
         [Test]
-        public void UpdateInvestment_SingleItem_ShouldUpdateInvestment()
+        public async Task UpdateInvestment_SingleItem_ShouldUpdateInvestment()
         {
             // Arrange
             CleanUp();
@@ -169,7 +169,7 @@ namespace InvestmentAppProd.Tests
             };
 
             // Act
-            var result = controller.UpdateInvestment(updateInvestment, newInvestment);
+            var result = await controller.UpdateInvestment(updateInvestment, newInvestment);
             var obj = result as NoContentResult;
 
             // Assert   : Status code 204 ("No Content")
