@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using InvestmentAppProd.Models;
 using InvestmentAppProd.Data;
+using InvestmentAppProd.Queries.FetchInvestment;
+using MediatR;
 
 namespace InvestmentAppProd.Controllers
 {
@@ -15,18 +17,20 @@ namespace InvestmentAppProd.Controllers
     public class InvestmentController : Controller
     {
         private readonly InvestmentDBContext _context;
+        private readonly IMediator _mediator;
 
-        public InvestmentController(InvestmentDBContext context)
+        public InvestmentController(InvestmentDBContext context, IMediator mediator)
         {
             _context = context;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Investment>> FetchInvestment()
+        public async Task<ActionResult<IEnumerable<Investment>>> FetchInvestment()
         {
             try
             {
-                return Ok(_context.Investments.ToList());
+                return Ok(await _mediator.Send(new FetchInvestmentCommand()));
             }
             catch (Exception e)
             {

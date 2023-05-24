@@ -12,31 +12,42 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System.Threading;
+using InvestmentAppProd.Queries.FetchInvestment;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using MediatR;
 
 namespace InvestmentAppProd.Tests
 {
     [TestFixture]
     public class TestInvestmentController
     {
-        private static DbContextOptions<InvestmentDBContext> dbContextOptions = new DbContextOptionsBuilder<InvestmentDBContext>()
-            .UseInMemoryDatabase(databaseName: "InvestmentsDbTest")
-            .Options;
-        InvestmentDBContext context;
+        InvestmentDBContext _context;
+        private IMediator _mediator;
 
         [OneTimeSetUp]
         public void Setup()
         {
-            context = new InvestmentDBContext(dbContextOptions);
-            context.Database.EnsureCreated();
+            var services = new ServiceCollection();
+
+            services.AddDbContext<InvestmentDBContext>(options => options.UseInMemoryDatabase("InvestmentsDbTest"));
+            services.AddMediatR(
+                cfg =>
+                {
+                    cfg.RegisterServicesFromAssembly(typeof(FetchInvestmentCommand).Assembly);
+                });
+            var provider = services.BuildServiceProvider();
+
+            _context = provider.GetService<InvestmentDBContext>();
+            _context.Database.EnsureCreated();
 
             SeedDatabase();
+
+            _mediator = provider.GetService<IMediator>();
         }
 
         [OneTimeTearDown]
-        public void CleanUp()
-        {
-            context.Database.EnsureDeleted();
-        }
+        public void CleanUp() { _context.Database.EnsureDeleted(); }
 
         private void SeedDatabase()
         {
@@ -70,31 +81,31 @@ namespace InvestmentAppProd.Tests
                     PrincipalAmount = 20000
                 });
 
-            context.Investments.AddRange(newInvestments);
-            context.SaveChanges();
+            _context.Investments.AddRange(newInvestments);
+            _context.SaveChanges();
         }
 
         private void EmptyDatabase()
         {
-            context.Investments.RemoveRange(context.Investments.ToList<Investment>());
-            context.SaveChanges();
+            _context.Investments.RemoveRange(_context.Investments.ToList<Investment>());
+            _context.SaveChanges();
         }
 
         [Test]
-        public void GetAllInvestments_WithExistingItems_ShouldReturnAllInvestments()
+        public async Task GetAllInvestments_WithExistingItems_ShouldReturnAllInvestments()
         {
             // ARRANGE
-            var controller = new InvestmentController(context);
+            var controller = new InvestmentController(_context, _mediator);
 
             // ACT
-            var result = controller.FetchInvestment();
+            var result = await controller.FetchInvestment();
             var obj = result.Result as ObjectResult;
             var objListResult = (List<Investment>)obj.Value;
             //var objCountResult = ((List<Investment>)obj.Value).Count();
 
             // ASSERT   : Status code 200 ("Ok") + Count of objects returned is correct + Object returned (first) is of Type Investment.
             Assert.AreEqual(200, (obj.StatusCode));
-            Assert.AreEqual(context.Investments.Count(), objListResult.Count());
+            Assert.AreEqual(_context.Investments.Count(), objListResult.Count());
             Assert.IsInstanceOf<Investment>(objListResult.First());
         }
 
@@ -102,7 +113,7 @@ namespace InvestmentAppProd.Tests
         public void GetInvestment_WithSingleItem_ShouldReturnSingleInvestment()
         {
             // Arrange
-            var controller = new InvestmentController(context);
+            var controller = new InvestmentController(_context, _mediator);
             var name = "Investment 1";
 
             // Act
@@ -120,7 +131,7 @@ namespace InvestmentAppProd.Tests
         public void AddInvestment_SingleItem_ShouldAddInvestment()
         {
             // Arrange
-            var controller = new InvestmentController(context);
+            var controller = new InvestmentController(_context, _mediator);
             var newInvestnment = new Investment
             {
                 Name = "Investment 4",
@@ -145,7 +156,7 @@ namespace InvestmentAppProd.Tests
             // Arrange
             CleanUp();
             Setup();
-            var controller = new InvestmentController(context);
+            var controller = new InvestmentController(_context, _mediator);
             var updateInvestment = "Investment 2";
             var newInvestment = new Investment
             {
@@ -168,7 +179,7 @@ namespace InvestmentAppProd.Tests
         public void DeleteInvestment_SingleItem_ShouldDeleteInvestment()
         {
             // Arrange
-            var controller = new InvestmentController(context);
+            var controller = new InvestmentController(_context, _mediator);
             var deleteInvestment = "Investment 2";
 
             // Act

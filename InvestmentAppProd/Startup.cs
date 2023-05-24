@@ -13,6 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using InvestmentAppProd.Data;
+using MediatR;
+using System.Reflection;
 
 namespace InvestmentAppProd
 {
@@ -30,6 +32,10 @@ namespace InvestmentAppProd
         {
             //Using InMemoryDatabase, Database name set as "Investments".
             services.AddDbContext<InvestmentDBContext>(options => options.UseInMemoryDatabase("Investments"));
+
+            services.AddMediatR(cfg => {
+                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
