@@ -7,10 +7,7 @@
 
     public class Error : IError
     {
-        public Error(ErrorType errorType)
-        {
-            ErrorType = errorType;
-        }
+        public Error(ErrorType errorType) { ErrorType = errorType; }
 
         public ErrorType ErrorType { get; set; }
     }

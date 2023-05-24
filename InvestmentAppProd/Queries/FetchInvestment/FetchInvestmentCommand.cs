@@ -2,10 +2,7 @@
 
 public class FetchInvestmentCommand : IRequest<Maybe<Investment>>
 {
-    public FetchInvestmentCommand(string nameOfInvestment)
-    {
-        NameOfInvestment = nameOfInvestment;
-    }
+    public FetchInvestmentCommand(string nameOfInvestment) { NameOfInvestment = nameOfInvestment; }
 
     public string NameOfInvestment { get; }
 }

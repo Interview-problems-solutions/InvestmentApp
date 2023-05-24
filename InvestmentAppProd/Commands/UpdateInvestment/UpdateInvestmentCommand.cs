@@ -9,5 +9,6 @@ public class UpdateInvestmentCommand : IRequest<Result<Unit, IError>>
     }
 
     public string NameOfInvestmentToUpdate { get; }
+
     public Investment NewDetailsOfInvestment { get; }
 }

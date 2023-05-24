@@ -4,18 +4,19 @@ internal class AddInvestmentHandler : IRequestHandler<AddInvestmentCommand, Resu
 {
     private readonly InvestmentDBContext _context;
 
-    public AddInvestmentHandler(InvestmentDBContext context)
-    {
-        _context = context;
-    }
+    public AddInvestmentHandler(InvestmentDBContext context) { _context = context; }
 
-    public async Task<Result<Investment, IError>> Handle(AddInvestmentCommand command, CancellationToken cancellationToken)
+    public async Task<Result<Investment, IError>> Handle(
+        AddInvestmentCommand command,
+        CancellationToken cancellationToken)
     {
-        if (command.Investment.StartDate > DateTime.Now)
+        if(command.Investment.StartDate > DateTime.Now)
             return Result.Failure<Investment, IError>(new Error(ErrorType.StartDateInFuture));
 
-        var result = await new FetchInvestmentHandler(_context).Handle(new FetchInvestmentCommand(command.Investment.Name), cancellationToken);
-            
+        var result = await new FetchInvestmentHandler(_context).Handle(
+            new FetchInvestmentCommand(command.Investment.Name),
+            cancellationToken);
+
         if(result.HasValue)
             return Result.Failure<Investment, IError>(new Error(ErrorType.AlreadyExists));
 
@@ -24,6 +25,6 @@ internal class AddInvestmentHandler : IRequestHandler<AddInvestmentCommand, Resu
         _context.Investments.Add(command.Investment);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return Result.Success<Investment, IError>(command.Investment);  
+        return Result.Success<Investment, IError>(command.Investment);
     }
 }

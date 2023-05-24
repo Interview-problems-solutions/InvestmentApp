@@ -1,14 +1,11 @@
-﻿using System.Linq;
+﻿namespace InvestmentAppProd.Data;
 
-namespace InvestmentAppProd.Data
+public class InvestmentDBContext : DbContext
 {
-    public class InvestmentDBContext : DbContext
+    public DbSet<Investment> Investments { get; set; }
+
+    public InvestmentDBContext(DbContextOptions<InvestmentDBContext> options) : base(options)
     {
-        public DbSet<Investment> Investments { get; set; }
-
-        public InvestmentDBContext(DbContextOptions<InvestmentDBContext> options) : base(options)
-        {
-        }
-
     }
+
 }

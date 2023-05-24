@@ -1,15 +1,8 @@
-﻿using InvestmentAppProd.Models;
-using MediatR;
+﻿namespace InvestmentAppProd.Commands.AddInvestment;
 
-namespace InvestmentAppProd.Commands.AddInvestment
+public class AddInvestmentCommand : IRequest<Result<Investment, IError>>
 {
-    public class AddInvestmentCommand : IRequest<Result<Investment, IError>>
-    {
-        public AddInvestmentCommand(Investment investment)
-        {
-            Investment = investment;
-        }
+    public AddInvestmentCommand(Investment investment) { Investment = investment; }
 
-        public Investment Investment { get; }
-    }
+    public Investment Investment { get; }
 }
