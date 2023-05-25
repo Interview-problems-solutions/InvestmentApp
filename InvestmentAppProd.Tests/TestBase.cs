@@ -28,7 +28,7 @@ internal class TestBase
             {
                 Name = "Investment 1",
                 StartDate = DateTime.Parse("2022-03-01"),
-                InterestType = "Simple",
+                InterestType = InterestType.Simple,
                 InterestRate = 3.875,
                 PrincipalAmount = 10000
             },
@@ -36,7 +36,7 @@ internal class TestBase
             {
                 Name = "Investment 2",
                 StartDate = DateTime.Parse("2022-04-01"),
-                InterestType = "Simple",
+                InterestType = InterestType.Simple,
                 InterestRate = 4,
                 PrincipalAmount = 15000
             },
@@ -44,7 +44,7 @@ internal class TestBase
             {
                 Name = "Investment 3",
                 StartDate = DateTime.Parse("2022-05-01"),
-                InterestType = "Compound",
+                InterestType = InterestType.Compound,
                 InterestRate = 5,
                 PrincipalAmount = 20000
             }

@@ -8,7 +8,7 @@ public class Investment
 
     public DateTime StartDate { get; set; }
 
-    public string InterestType { get; set; }
+    public InterestType InterestType { get; set; }
 
     public double InterestRate { get; set; }
 
@@ -21,7 +21,7 @@ public class Investment
     {
     }
 
-    public Investment(string name, DateTime startDate, string interestType, double rate, double principal)
+    public Investment(string name, DateTime startDate, InterestType interestType, double rate, double principal)
     {
         Name = name;
         StartDate = startDate;

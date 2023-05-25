@@ -11,7 +11,7 @@ internal class TestUpdateInvestmentHandler : TestBase
             {
                 Name = "Test Investment 2",
                 StartDate = DateTime.Parse("2022-03-01"),
-                InterestType = "Simple",
+                InterestType = InterestType.Simple,
                 InterestRate = 3.875,
                 PrincipalAmount = 10000
             });
@@ -33,7 +33,7 @@ internal class TestUpdateInvestmentHandler : TestBase
             {
                 Name = "Test Investment",
                 StartDate = DateTime.Now.AddMinutes(1),
-                InterestType = "Simple",
+                InterestType = InterestType.Simple,
                 InterestRate = 3.875,
                 PrincipalAmount = 10000
             });
@@ -55,7 +55,7 @@ internal class TestUpdateInvestmentHandler : TestBase
             {
                 Name = "Test No Investment",
                 StartDate = DateTime.Parse("2022-03-01"),
-                InterestType = "Simple",
+                InterestType = InterestType.Simple,
                 InterestRate = 3.875,
                 PrincipalAmount = 10000
             });
@@ -77,7 +77,7 @@ internal class TestUpdateInvestmentHandler : TestBase
             {
                 Name = "Investment 1",
                 StartDate = DateTime.Parse("2022-03-01"),
-                InterestType = "Simple",
+                InterestType = InterestType.Simple,
                 InterestRate = 3.875,
                 PrincipalAmount = 100000
             });

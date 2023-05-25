@@ -12,7 +12,7 @@ internal class TestInvestmentExtensions
         var investment = new Investment(
             "Compound Investment",
             DateTime.Now.AddMonths(ToMonths(numberOfYears)),
-            "Compound",
+            InterestType.Compound,
             interestRate,
             principal);
 
@@ -29,7 +29,7 @@ internal class TestInvestmentExtensions
         var investment = new Investment(
             "Simple Investment",
             DateTime.Now.AddMonths(ToMonths(numberOfYears)),
-            "Simple",
+            InterestType.Simple,
             interestRate,
             principal);
 

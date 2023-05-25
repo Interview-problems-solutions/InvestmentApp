@@ -21,7 +21,7 @@ internal class TestDeleteInvestmentHandler : TestBase
         {
             Name = "Test Investment",
             StartDate = DateTime.Parse("2022-03-01"),
-            InterestType = "Simple",
+            InterestType = InterestType.Simple,
             InterestRate = 3.875,
             PrincipalAmount = 10000
         };

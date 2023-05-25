@@ -40,9 +40,13 @@ public static class InvestmentExtensions
 
     public static double CalculateInterest(this Investment investment)
     {
-        var value = investment.InterestType == "Simple"
-            ? investment.CalculateSimpleInterest()
-            : investment.CalculateCompoundInterest();
+        var value = investment.InterestType switch
+        {
+            InterestType.None => 0,
+            InterestType.Simple => investment.CalculateSimpleInterest(),
+            InterestType.Compound => investment.CalculateCompoundInterest(),
+            _ => 0
+        };
 
         return Math.Round(value, 2);
     }
