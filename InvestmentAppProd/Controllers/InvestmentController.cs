@@ -4,6 +4,8 @@
 [ApiController]
 public class InvestmentController : Controller
 {
+    // Use mediator pattern to keep controller thin
+    // and it should only have logic related to http requests/response
     private readonly IMediator _mediator;
 
     public InvestmentController(IMediator mediator)
@@ -98,13 +100,8 @@ public class InvestmentController : Controller
         try
         {
             var result = await _mediator.Send(new DeleteInvestmentCommand(name));
-            
-            if (result.IsFailure)
-            {
-                return NotFound();
-            }
 
-            return NoContent();
+            return result.IsFailure ? NotFound() : NoContent();
         }
         catch (Exception e)
         {

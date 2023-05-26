@@ -6,8 +6,11 @@ public class UpdateInvestmentHandler : IRequestHandler<UpdateInvestmentCommand, 
 
     public UpdateInvestmentHandler(InvestmentDBContext context) { _context = context; }
 
+    // Use Result type to return success or failure
+    // avoid throwing exceptions or returning null
     public async Task<Result<Unit, IError>> Handle(UpdateInvestmentCommand command, CancellationToken cancellationToken)
     {
+        // Validation logic can be moved to a validator (or) a pipeline validation eventually
         if(command.NameOfInvestmentToUpdate != command.NewDetailsOfInvestment.Name)
             return Result.Failure<Unit, IError>(new Error(ErrorType.NameMisMatch));
 

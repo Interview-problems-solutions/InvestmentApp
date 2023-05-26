@@ -1,5 +1,7 @@
 ﻿namespace InvestmentAppProd.Models;
 
+// this needs to be converted to POCO class to be used for only DB
+// when a Domain layer is created then we can add mapping and keep logic in domain layer
 public class Investment
 {
     [Required]
@@ -14,6 +16,7 @@ public class Investment
 
     public double PrincipalAmount { get; set; }
     
+    // Do not persist a value to DB that can be calculated on the fly
     [NotMapped]
     public double CurrentValue => this.CalculateInterest();
 

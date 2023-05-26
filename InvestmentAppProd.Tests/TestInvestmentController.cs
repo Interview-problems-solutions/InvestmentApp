@@ -9,6 +9,9 @@ public class TestInvestmentController
     [OneTimeSetUp]
     public void Setup()
     {
+        // use DI to test controller end-to-end
+        // works for this simple case, but for more complex cases
+        // .http or postman scripts can/need to be used to test controller
         var services = new ServiceCollection();
 
         services.AddDbContext<InvestmentDBContext>(options => options.UseInMemoryDatabase("InvestmentsDbTest"));
@@ -34,7 +37,7 @@ public class TestInvestmentController
     {
         var newInvestments = new List<Investment>
         {
-            new Investment
+            new()
             {
                 Name = "Investment 1",
                 StartDate = DateTime.Parse("2022-03-01"),
@@ -42,7 +45,7 @@ public class TestInvestmentController
                 InterestRate = 3.875,
                 PrincipalAmount = 10000
             },
-            new Investment
+            new()
             {
                 Name = "Investment 2",
                 StartDate = DateTime.Parse("2022-04-01"),
@@ -50,7 +53,7 @@ public class TestInvestmentController
                 InterestRate = 4,
                 PrincipalAmount = 15000
             },
-            new Investment
+            new()
             {
                 Name = "Investment 3",
                 StartDate = DateTime.Parse("2022-05-01"),

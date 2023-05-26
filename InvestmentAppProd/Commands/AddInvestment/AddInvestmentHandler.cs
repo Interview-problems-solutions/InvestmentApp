@@ -10,6 +10,8 @@ public class AddInvestmentHandler : IRequestHandler<AddInvestmentCommand, Result
         AddInvestmentCommand command,
         CancellationToken cancellationToken)
     {
+        // eventually when validations grow this can be moved to a validator (or) a pipeline validation
+        // this way clear error codes can be sent to front-end to translate to proper error messages
         if(command.Investment.StartDate > DateTime.Now)
             return Result.Failure<Investment, IError>(new Error(ErrorType.StartDateInFuture));
 

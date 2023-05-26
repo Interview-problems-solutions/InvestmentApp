@@ -6,6 +6,8 @@ public class FetchInvestmentHandler : IRequestHandler<FetchInvestmentQuery, Mayb
 
     public FetchInvestmentHandler(InvestmentDBContext context) { this._context = context; }
 
+    // Use Maybe<T> to avoid returning null, helps use to clearly handle the case where the investment is not found
+    // it is more readable and avoids null checks in consuming layers
     public async Task<Maybe<Investment>> Handle(FetchInvestmentQuery command, CancellationToken cancellationToken)
     {
         if(string.IsNullOrWhiteSpace(command.NameOfInvestment))

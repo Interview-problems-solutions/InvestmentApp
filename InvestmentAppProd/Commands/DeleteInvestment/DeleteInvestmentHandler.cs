@@ -6,10 +6,13 @@ public class DeleteInvestmentHandler : IRequestHandler<DeleteInvestmentCommand, 
 
     public DeleteInvestmentHandler(InvestmentDBContext context) { _context = context; }
 
+    // Use Result type to return success or failure
+    // it is more readable than throwing exceptions or returning null
     public async Task<Result> Handle(DeleteInvestmentCommand command, CancellationToken cancellationToken)
     {
         var investment = await _context.Investments.FindAsync(command.NameOfInvestment);
 
+        // using Result type avoids checking for null in upper layers
         if(investment == null)
             return Result.Failure($"Investment with name {command.NameOfInvestment} not found.");
 

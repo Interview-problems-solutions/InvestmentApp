@@ -2,6 +2,7 @@
 
 public static class InvestmentExtensions
 {
+    // Calculations needs to be separate methods, in future can be moved to a separate class.
     public static double CalculateCompoundInterest(this Investment investment)
     {
         // Interest rate is divided by 100.
